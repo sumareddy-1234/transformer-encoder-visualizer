@@ -1,196 +1,345 @@
-🧠 Transformer Encoder Visualizer
+# 🧠 Transformer Encoder Visualizer
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python) ![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-orange?logo=pytorch) ![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red?logo=streamlit) ![NumPy](https://img.shields.io/badge/NumPy-Numerical%20Computing-yellow?logo=numpy) ![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-lightblue?logo=pandas) ![Plotly](https://img.shields.io/badge/Plotly-Interactive%20Charts-green?logo=plotly)
+An end-to-end implementation of a Transformer Encoder from scratch using PyTorch and Streamlit for interpretability and attention visualization.
 
-The Transformer Encoder Visualizer is an interactive NLP visualization tool built with Streamlit. It demonstrates how Transformer Encoders work internally — from token embeddings to self-attention and multi-head attention — with intuitive Plotly-based visualizations and an interactive dashboard.
+---
 
-Badges
+# 📌 Project Overview
 
-The repository includes status/technology badges at the top (rendered inline in the title section).
+This project demonstrates the internal mechanics of Transformer Encoders by implementing:
 
-✨ Features
+- Scaled Dot-Product Attention
+- Multi-Head Attention
+- Positional Encodings
+- Transformer Encoder Layers
+- Attention Heatmap Visualization
+- Attention Entropy Analysis
+- Token Attribution
 
-- Tokenization of input sentences
-- Embedding generation and visualization
-- Self-attention heatmap visualization
-- Multi-head attention exploration
-- Token importance scoring
-- Interactive Plotly heatmaps
-- Streamlit dashboard UI with dark/light mode
+The project also includes an interactive Streamlit dashboard for exploring attention patterns across layers and heads.
 
-Tech Stack
+---
 
-- Python 3.11
+# 🚀 Features
+
+## ✅ Transformer Components Built From Scratch
+
+- Manual implementation of Scaled Dot-Product Attention
+- Custom Multi-Head Attention module
+- Sinusoidal positional encoding
+- Learned positional encoding
+- Feed Forward Network
+- Layer Normalization
+- Residual Connections
+
+> No usage of:
+>
+> - `torch.nn.MultiheadAttention`
+> - `torch.nn.functional.multi_head_attention_forward`
+
+---
+
+## 📊 Streamlit Interpretability Dashboard
+
+Interactive dashboard with:
+
+- Attention Heatmaps
+- Multi-Head Visualization
+- Token Importance Analysis
+- Attention Entropy Dashboard
+- Layer and Head Selection Controls
+
+---
+
+## 📈 Training Instrumentation
+
+Training pipeline logs:
+
+- Attention Entropy
+- Attention Weight Snapshots
+- Model Checkpoints
+
+---
+
+## 🐳 Dockerized Deployment
+
+The entire application is containerized using Docker and Docker Compose.
+
+---
+
+# 🏗️ Project Structure
+
+```text
+transformer-encoder-visualizer/
+│
+├── app.py
+├── model.py
+├── train.py
+├── utils.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── README.md
+├── .env.example
+│
+├── models/
+│   └── final_model.pth
+│
+├── logs/
+│   └── training_metrics.csv
+│
+├── snapshots/
+│   ├── epoch_1_weights.pt
+│   └── final_epoch_weights.pt
+│
+├── reports/
+│   └── attention_head_biography.md
+│
+├── verification/
+│   ├── attention_output.json
+│   └── encodings_output.json
+│
+└── assets/
+```
+
+---
+
+# ⚙️ Technologies Used
+
+- Python
 - PyTorch
 - Streamlit
 - NumPy
 - Pandas
 - Plotly
+- Docker
 
-(These are reflected by the badges and requirements.txt.)
+---
 
-📂 Project Structure
+# 🧠 Transformer Architecture
 
-Use a fenced code block for the tree to preserve formatting:
+## Scaled Dot-Product Attention
 
-```
-transformer-encoder-visualizer/
-├── app.py                  # Streamlit frontend
-├── model.py                # Transformer logic
-├── train.py                # Training pipeline
-├── verify.py               # Testing & validation
-├── requirements.txt
-├── Dockerfile
-├── .gitignore
-├── .dockerignore
-├── logs/
-├── models/
-├── snapshots/
-└── verification/
+The attention mechanism is implemented manually using:
+
+```math
+Attention(Q,K,V) = Softmax((QK^T) / sqrt(d_k))V
 ```
 
-Add brief descriptions for non-obvious directories (e.g., models/ stores saved models, snapshots/ stores example visual outputs).
+This allows the model to learn contextual relationships between tokens.
 
-⚙️ Installation
+---
 
-1) Clone the repository
+## Multi-Head Attention
+
+The model splits embeddings into multiple heads to learn:
+
+- syntactic relationships
+- contextual dependencies
+- token relevance patterns
+
+---
+
+## Positional Encodings
+
+Two positional encoding methods are implemented:
+
+### 1. Sinusoidal Encoding
+Fixed mathematical encoding introduced in the original Transformer paper.
+
+### 2. Learned Encoding
+Trainable positional embeddings learned during training.
+
+---
+
+# 📚 Dataset
+
+The model is trained using NLP text classification datasets.
+
+Example:
+- SST-2 Sentiment Dataset
+
+---
+
+# 🏋️ Training Pipeline
+
+The training pipeline includes:
+
+- Attention weight extraction
+- Attention entropy logging
+- Gradient clipping
+- Learning rate warmup
+- Snapshot saving
+
+---
+
+# 📈 Attention Entropy
+
+Attention entropy measures how focused or diffuse each attention head is.
+
+Low entropy:
+- focused attention
+- specialization
+
+High entropy:
+- distributed attention
+- broad contextual understanding
+
+Entropy values are logged in:
+
+```text
+logs/training_metrics.csv
+```
+
+---
+
+# 🖥️ Running Locally
+
+## 1. Clone Repository
 
 ```bash
-git clone https://github.com/sumareddy-1234/transformer-encoder-visualizer.git
+git clone <repository-url>
 cd transformer-encoder-visualizer
 ```
 
-2) Create and activate a virtual environment
+---
 
-- Windows
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-- macOS / Linux
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-3) Install dependencies
+## 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Notes:
-- If you encounter dependency issues, consider using pip-tools or poetry.
-- Provide a requirements.txt or lockfile to ensure reproducible installs.
+---
 
-Run Locally
-
-After installing dependencies and activating the virtual environment, start the Streamlit app:
+## 3. Run Streamlit App
 
 ```bash
 streamlit run app.py
 ```
 
-Open the URL shown by Streamlit (typically http://localhost:8501) to use the interactive visualizer.
+Application runs at:
 
-Example quick test:
-- In the app input box, enter: "The quick brown fox jumps over the lazy dog"
-- Toggle attention heads and observe the Plotly heatmaps and token importance scores.
+```text
+http://localhost:8501
+```
 
-🐳 Docker Setup
+---
 
-Build the Docker image:
+# 🐳 Docker Setup
+
+## Build Docker Image
 
 ```bash
 docker build -t transformer-visualizer .
 ```
 
-Run the container (expose Streamlit default port 8501):
+---
+
+## Run Docker Container
 
 ```bash
 docker run -p 8501:8501 transformer-visualizer
 ```
 
-Consider adding a docker-compose.yml for development and specifying a non-root user and reduced image size (e.g., use a slim Python base image) for production use.
+---
 
-Usage / Examples
-
-How it works (high level):
-1. Input sentence is tokenized.
-2. Tokens are mapped to embeddings.
-3. Self-attention computes relationships and attention weights.
-4. Multi-head attention captures different relational patterns.
-5. Attention maps are shown with interactive Plotly heatmaps.
-
-Example (what to expect in the UI):
-- Enter: "Transformers are powerful for NLP tasks." → tokens and embeddings appear.
-- Click an attention head to see a heatmap of token-to-token attention scores.
-- Use dark/light toggle to change theme.
-
-Contributing
-
-Thank you for your interest in contributing! A minimal contributing guide:
-
-- Fork the repo and create a feature branch: `git checkout -b feat/my-feature`
-- Run tests (if any) and ensure linting passes.
-- Open a Pull Request describing the change and link to any related issue.
-
-Add a CONTRIBUTING.md file to this repository with repo-specific testing and style rules.
-
-Running Tests
-
-The original README references `verify.py` but does not include instructions. Add tests and run them with a command similar to:
+## Docker Compose
 
 ```bash
-python -m pytest tests/
+docker-compose up --build
 ```
 
-Or provide `verify.py` usage details, e.g.: `python verify.py --sample tests/sample_input.txt`.
+---
 
-Environment Variables
+# 🔍 Verification Files
 
-If the app requires any secrets, API keys, or configurable parameters, document them here and provide an `.env.example`. Example:
+## Attention Verification
 
-```
-# .env.example
-STREAMLIT_SERVER_PORT=8501
-MODEL_PATH=models/latest.pt
+```text
+verification/attention_output.json
 ```
 
-Load env vars via python-dotenv or Streamlit secrets as appropriate.
+Contains:
 
-License
+```json
+{
+  "input_shape": [1, 10, 128],
+  "output_shape": [1, 10, 128],
+  "attention_weights_shape": [1, 4, 10, 10]
+}
+```
 
-The original README did not include a license. Add a LICENSE file (e.g., MIT) and include a one-line license notice here, for example:
+---
 
-MIT License — see LICENSE file.
+## Positional Encoding Verification
 
-If you intend a different license, specify it and include the LICENSE file in the repo.
+```text
+verification/encodings_output.json
+```
 
-👨‍💻 Author
+Contains:
 
-Suma Satti
+```json
+{
+  "sinusoidal_encoding_shape": [1, 20, 128],
+  "learned_encoding_shape": [1, 20, 128]
+}
+```
 
-Contact: (add an email or GitHub profile link here)
+---
 
-Contributions and bug reports are welcome — please open an issue or PR.
+# 📊 Streamlit Dashboard Components
 
-Acknowledgements
+## Attention Heatmap
 
-- Inspiration: Transformer papers and Streamlit examples
-- Libraries: PyTorch, Streamlit, Plotly, NumPy, Pandas
+Interactive visualization of token-to-token attention.
 
-Consider adding links to key resources (original Transformer paper, Streamlit docs, Plotly docs).
+---
 
-Demo
+## Multi-Head Attention Explorer
 
-If you have a live demo (e.g., via Streamlit sharing, Heroku, or GitHub Pages), add the link here. Consider adding a screenshot or short GIF showing the UI and an example visualization.
+Analyze individual attention heads separately.
 
-Example placeholder:
+---
 
-![screenshot](docs/screenshot.png)
+## Entropy Dashboard
 
-(Include `docs/` with images in the repo.)
+Visualize entropy trends across:
+
+- layers
+- heads
+- epochs
+
+---
+
+## Token Attribution
+
+Highlights important tokens influencing predictions.
+
+---
+
+# 📄 Report
+
+Detailed interpretability analysis available at:
+
+```text
+reports/attention_head_biography.md
+```
+
+---
+
+# 📚 References
+
+- Attention Is All You Need (Vaswani et al.)
+- The Illustrated Transformer
+- The Annotated Transformer
+- Streamlit Documentation
+
+---
+
+# 👨‍💻 Author
+
+Transformer Encoder Visualizer Project
+
+Built for interpretability, visualization, and deep understanding of Transformer architectures.
