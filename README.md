@@ -68,7 +68,7 @@ transformer-encoder-visualizer/
 ## Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sumareddy-1234/transformer-encoder-visualizer.git
 cd transformer-encoder-visualizer
 ```
 
@@ -154,16 +154,27 @@ Metrics include:
 
 ---
 
-# 🧠 Transformer Formula
+# 🧠 Transformer Attention Formula
 
-The visualization demonstrates the standard transformer attention equation:
+The visualization demonstrates the standard transformer self-attention equation:
 
 \[
-Attention(Q,K,V)=Softmax\left(\frac{QK^T}{\sqrt{d}}\right)V
+Attention(Q, K, V) =
+Softmax\left(
+\frac{QK^T}{\sqrt{d_k}}
+\right)V
 \]
 
----
+Where:
 
+- \(Q\) = Query matrix
+- \(K\) = Key matrix
+- \(V\) = Value matrix
+- \(d_k\) = Dimension of key vectors
+
+This equation computes attention scores between tokens and determines how strongly each token attends to others in the sequence.
+
+---
 # 📸 Visual Components
 
 - Embedding heatmaps
