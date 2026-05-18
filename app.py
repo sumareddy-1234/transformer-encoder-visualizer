@@ -642,7 +642,7 @@ with tab1:
         "Characters": [len(t) for t in tokens]
     })
 
-    st.dataframe(token_df, use_container_width=True)
+    st.dataframe(token_df, width='stretch')
 
     cols = st.columns(len(tokens))
 
@@ -689,7 +689,7 @@ with tab2:
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        width='stretch'
     )
 
     st.markdown("""
@@ -722,7 +722,7 @@ with tab3:
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        width='stretch'
     )
 
     st.markdown("### Inspect Attention for a Token")
@@ -761,7 +761,7 @@ with tab3:
 
     st.plotly_chart(
         bar_fig,
-        use_container_width=True
+        width='stretch'
     )
 
 # =========================================================
@@ -821,7 +821,7 @@ with tab4:
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        width='stretch'
     )
 
     # =====================================================
@@ -860,7 +860,7 @@ with tab5:
 
     st.dataframe(
         imp_df,
-        use_container_width=True
+        width='stretch'
     )
 
     fig = px.bar(
@@ -877,7 +877,7 @@ with tab5:
 
     st.plotly_chart(
         fig,
-        use_container_width=True
+        width='stretch'
     )
 
 # =========================================================

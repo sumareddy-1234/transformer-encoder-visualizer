@@ -1,93 +1,165 @@
 import os
 import json
+import math
 import torch
-import torch.nn as nn
+import pandas as pd
 
-# =========================
-# SAMPLE DATA
-# =========================
-
-sentences = [
-    "Transformers are powerful",
-    "Encoder learns representations",
-    "Attention captures context"
-]
-
-# =========================
-# SIMPLE TOKENIZER
-# =========================
-
-vocab = {}
-idx = 1
-
-for sentence in sentences:
-    for word in sentence.lower().split():
-        if word not in vocab:
-            vocab[word] = idx
-            idx += 1
-
-vocab_size = len(vocab) + 1
-
-max_len = 6
-
-encoded_sentences = []
-
-for sentence in sentences:
-    tokens = [vocab[word] for word in sentence.lower().split()]
-
-    while len(tokens) < max_len:
-        tokens.append(0)
-
-    encoded_sentences.append(tokens)
-
-input_tensor = torch.tensor(encoded_sentences)
-
-# =========================
-# MODEL
-# =========================
-
-embedding_dim = 16
-num_heads = 2
-
-embedding = nn.Embedding(vocab_size, embedding_dim)
-
-encoder_layer = nn.TransformerEncoderLayer(
-    d_model=embedding_dim,
-    nhead=num_heads,
-    batch_first=True
+from model import (
+    MultiHeadAttention,
+    SinusoidalPositionalEncoding,
+    LearnedPositionalEncoding,
+    TransformerEncoder
 )
 
-transformer_encoder = nn.TransformerEncoder(
-    encoder_layer,
-    num_layers=2
-)
+# =========================================================
+# CREATE DIRECTORIES
+# =========================================================
 
-# =========================
-# FORWARD PASS
-# =========================
-
-embedded = embedding(input_tensor)
-
-transformer_output = transformer_encoder(embedded)
-
-# =========================
-# SAVE REAL NUMERIC DATA
-# =========================
-
+os.makedirs("models", exist_ok=True)
+os.makedirs("logs", exist_ok=True)
+os.makedirs("snapshots", exist_ok=True)
 os.makedirs("verification", exist_ok=True)
 
-# Save embeddings
-with open("verification/encodings_output.json", "w") as f:
-    json.dump(
-        embedded.detach().numpy().tolist(),
-        f
-    )
+# =========================================================
+# ATTENTION VERIFICATION
+# =========================================================
 
-# Save transformer outputs
+batch_size = 1
+seq_len = 10
+d_model = 128
+num_heads = 4
+
+x = torch.randn(batch_size, seq_len, d_model)
+
+attention = MultiHeadAttention(
+    d_model=d_model,
+    num_heads=num_heads
+)
+
+output, attention_weights = attention(x)
+
+attention_verification = {
+    "input_shape": list(x.shape),
+    "output_shape": list(output.shape),
+    "attention_weights_shape": list(attention_weights.shape)
+}
+
 with open("verification/attention_output.json", "w") as f:
-    json.dump(
-        transformer_output.detach().numpy().tolist(),
-        f
+    json.dump(attention_verification, f, indent=4)
+
+# =========================================================
+# POSITIONAL ENCODING VERIFICATION
+# =========================================================
+
+encoding_input = torch.randn(1, 20, 128)
+
+sinusoidal = SinusoidalPositionalEncoding(
+    d_model=128,
+    max_len=20
+)
+
+learned = LearnedPositionalEncoding(
+    d_model=128,
+    max_len=20
+)
+
+sin_output = sinusoidal(encoding_input)
+learned_output = learned(encoding_input)
+
+encoding_verification = {
+    "sinusoidal_encoding_shape": list(sin_output.shape),
+    "learned_encoding_shape": list(learned_output.shape)
+}
+
+with open("verification/encodings_output.json", "w") as f:
+    json.dump(encoding_verification, f, indent=4)
+
+# =========================================================
+# CREATE MODEL
+# =========================================================
+
+model = TransformerEncoder(
+    vocab_size=1000,
+    d_model=128,
+    num_heads=4,
+    num_layers=2,
+    max_len=100,
+    num_classes=2
+)
+
+# =========================================================
+# DUMMY TRAINING LOOP
+# =========================================================
+
+metrics = []
+
+epochs = 5
+
+for epoch in range(1, epochs + 1):
+
+    dummy_input = torch.randint(
+        0,
+        1000,
+        (1, 10)
     )
 
-print("Verification files generated successfully")
+    outputs, attention_list = model(dummy_input)
+
+    # =====================================================
+    # ENTROPY CALCULATION
+    # =====================================================
+
+    for layer_idx, layer_attention in enumerate(attention_list):
+
+        for head_idx in range(layer_attention.shape[1]):
+
+            attn = layer_attention[0, head_idx]
+
+            entropy = -torch.sum(
+                attn * torch.log(attn + 1e-9)
+            ).item()
+
+            metrics.append({
+                "epoch": epoch,
+                "layer": layer_idx,
+                "head": head_idx,
+                "attention_entropy": entropy
+            })
+
+    # =====================================================
+    # SAVE SNAPSHOTS
+    # =====================================================
+
+    if epoch == 1:
+        torch.save(
+            attention_list,
+            "snapshots/epoch_1_weights.pt"
+        )
+
+    if epoch == epochs:
+        torch.save(
+            attention_list,
+            "snapshots/final_epoch_weights.pt"
+        )
+
+# =========================================================
+# SAVE METRICS
+# =========================================================
+
+df = pd.DataFrame(metrics)
+
+df.to_csv(
+    "logs/training_metrics.csv",
+    index=False
+)
+
+# =========================================================
+# SAVE MODEL
+# =========================================================
+
+torch.save(
+    model.state_dict(),
+    "models/final_model.pth"
+)
+
+print("Training completed successfully.")
