@@ -2,12 +2,4 @@ venv/
 __pycache__/
 *.pyc
 
-models/
-snapshots/
-logs/
-verification/
-
-*.pth
-*.pt
-
 .env
