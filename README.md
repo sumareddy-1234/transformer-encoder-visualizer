@@ -186,4 +186,4 @@ After execution the project generates:
 
 # 👨‍💻 Author
 
-Transformer Encoder Visualizer Project
+Satti Suma
