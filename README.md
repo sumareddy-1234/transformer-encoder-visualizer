@@ -1,10 +1,10 @@
 # 🧠 Transformer Encoder Visualizer
 
-An interactive Streamlit-based NLP visualization tool that demonstrates how Transformer Encoders work internally using token embeddings, self-attention, and multi-head attention.
+An interactive NLP visualization platform built with Streamlit and PyTorch to demonstrate the internal working of Transformer Encoder architectures including token embeddings, self-attention, and multi-head attention mechanisms.
 
 ---
 
-# 🚀 Features
+## 🚀 Features
 
 - 🔤 Tokenization visualization
 - 🧠 Embedding heatmap visualization
@@ -19,7 +19,19 @@ An interactive Streamlit-based NLP visualization tool that demonstrates how Tran
 
 ---
 
-# 🛠️ Tech Stack
+## 🎓 Learning Objectives
+
+This project helps users understand:
+
+- Transformer encoder architecture
+- Self-attention mechanism
+- Query-Key-Value computations
+- Multi-head attention
+- Token relationships in NLP models
+- Attention score visualization
+---
+
+## 🛠️ Tech Stack
 
 - Python
 - Streamlit
@@ -31,7 +43,7 @@ An interactive Streamlit-based NLP visualization tool that demonstrates how Tran
 
 ---
 
-# 📂 Project Structure
+## 📂 Project Structure
 
 ```text
 transformer-encoder-visualizer/
@@ -96,31 +108,43 @@ streamlit run app.py
 
 ---
 
-# 🐳 Docker Setup
+## 🐳 Docker Setup
 
-## Build Docker Image
+### Build Docker Image
 
 ```bash
 docker build -t transformer-visualizer .
 ```
 
-## Run Container
+### Run Docker Container
 
 ```bash
 docker run -p 8501:8501 transformer-visualizer
 ```
 
+### Run with Docker Compose
+
+```bash
+docker-compose up
+```
+
+### Rebuild Containers
+
+```bash
+docker-compose up --build
+```
 ---
 
-# 📊 Attention Visualization
+## 📊 Attention Visualization
 
-The application demonstrates:
+The application visually demonstrates:
 
 - Self-attention computation
 - Query-Key-Value mechanism
 - Multi-head attention
 - Token importance scoring
-- Embedding visualization
+- Embedding relationships
+- Attention score distributions
 
 ---
 
@@ -184,14 +208,15 @@ This equation computes attention scores between tokens and determines how strong
 
 ---
 
-# ✅ Output Files
+## ✅ Generated Outputs
 
-After execution the project generates:
+After execution, the project generates:
 
 - trained model weights
-- attention snapshots
+- attention visualizations
 - verification outputs
 - training metrics
+- checkpoint snapshots
 
 ---
 
